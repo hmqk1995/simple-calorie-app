@@ -9,10 +9,14 @@ const Schema = mongoose.Schema;
  * price: US collar cent based. e.g. $56.25 -> 5625
  * */
  const userSchema = new Schema({
-  username: String,
+  username: {
+    type: String,
+    required: true,
+  },
   role: {
     type: String,
     enum: ['admin', 'guest'],
+    required: true,
   },
 });
   
