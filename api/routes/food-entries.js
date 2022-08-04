@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const { authenticateToken } = require('../services/users');
-const { createFoodEntry } = require('../services/food-entries');
+const {
+  createFoodEntry,
+  getFoodEntries,
+} = require('../services/food-entries');
 
 // POST: add a new food entry
 router.post('/food-enrties', authenticateToken, async (req, res) => {
@@ -20,13 +23,22 @@ router.post('/food-enrties', authenticateToken, async (req, res) => {
     price,
     username,
   });
-  console.log(response)
   return res.json(response);
 })
 
 // GET: get all food entries
-router.get('/food-enrties', authenticateToken, (req, res) => {
-  return res.send('Get all food entries');
+router.get('/food-enrties', authenticateToken, async (req, res) => {
+  const { username } = req.user;
+  const data = await getFoodEntries(username);
+;
+  return res.send(
+    data.map(({name, date, calories, price}) => ({
+      name,
+      date,
+      calories,
+      price,
+    }))
+  );
 })
 
 // GET: get single food entry

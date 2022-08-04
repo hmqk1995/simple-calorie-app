@@ -18,6 +18,16 @@ async function createFoodEntry({
   return await foodEntry.save();
 }
 
+async function getFoodEntries(username) {
+  const user = await User.findOne({username});
+  return await FoodEntry.find({
+    user: user._id,
+  }).sort({
+    date: 'desc'
+  }).exec();
+}
+
 module.exports = {
   createFoodEntry,
+  getFoodEntries,
 }

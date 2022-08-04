@@ -1,0 +1,34 @@
+<template>
+  <el-table
+    :data="foodEntries"
+    style="width: 100%"
+  >
+    <el-table-column
+      prop="date"
+      label="Date"
+    >
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="Name"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="calories"
+      label="Calories">
+    </el-table-column>
+    <el-table-column
+      prop="price"
+      label="Price">
+    </el-table-column>
+  </el-table>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+export default {
+  computed: {
+    ...mapState(['foodEntries']),
+  }
+}
+</script>

@@ -29,14 +29,18 @@ const store = new Vuex.Store({
     },
     setAccessToken(state, token) {
       state.access_token = token;
+    },
+    setFoodEntries(state, entries) {
+      state.foodEntries = entries;
     }
   },
   actions: {
-    async login({ commit }, username) {
+    async login({ commit, dispatch }, username) {
       const { data } = await axios.post(`/users/${username}/auth`);
       sessionStorage.setItem('access_token', data);
       commit('setUsername', username);
       commit('setAccessToken', data);
+      dispatch('getFoodEntries');
     },
     async addFoodEntry(context, {
       name,
@@ -50,7 +54,12 @@ const store = new Vuex.Store({
         calories,
         price,
       });
-    }
+    },
+    async getFoodEntries({commit}) {
+      const { data } = await axios.get('/food-enrties');
+      const entries = data.map(entry => ({...entry, date: new Date(entry.date).toLocaleString()}))
+      commit('setFoodEntries', entries);
+    },
   },
 });
 

@@ -2,18 +2,21 @@
   <div id="app">
     <LoginPanel />
     <AddFoodEntry />
+    <FoodEntryList />
   </div>
 </template>
 
 <script>
 import LoginPanel from './components/LoginPanel.vue';
 import AddFoodEntry from './components/AddFoodEntry.vue';
+import FoodEntryList from './components/FoodEntryList.vue';
 
 export default {
   name: 'App',
   components: {
     LoginPanel,
     AddFoodEntry,
+    FoodEntryList,
   },
   created() {
     sessionStorage.clear();
