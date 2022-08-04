@@ -14,7 +14,10 @@ export default {
   components: {
     LoginPanel,
     AddFoodEntry,
-  }
+  },
+  created() {
+    sessionStorage.clear();
+  },
 }
 </script>
 

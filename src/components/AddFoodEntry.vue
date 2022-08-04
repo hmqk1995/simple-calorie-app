@@ -1,23 +1,23 @@
 <template>
   <div>
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Food name">
+    <el-form ref="form" :rules="rules" :model="form" label-width="120px">
+      <el-form-item label="Food name" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="Date">
+      <el-form-item label="Date" prop="date">
         <el-date-picker
           v-model="form.date"
           type="datetime"
           placeholder="Pick a day">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="Calories">
+      <el-form-item label="Calories" prop="calories">
         <el-input
           v-model="form.calories"
           type="number"
         ></el-input>
       </el-form-item>
-      <el-form-item label="Price">
+      <el-form-item label="Price" prop="price">
         <el-input
           v-model="form.price"
           type="number"
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -42,11 +43,40 @@ export default {
         calories: '',
         price: '',
       },
+      rules: {
+        name: [
+          {
+            required: true,
+          }
+        ],
+        date: [
+          {
+            required: true,
+          }
+        ],
+        calories: [
+          {
+            required: true,
+          }
+        ],
+        price: [
+          {
+            required: true,
+          }
+        ],
+      }
     }
   },
   methods: {
+    ...mapActions(['addFoodEntry']),
     onSubmit() {
-      
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.addFoodEntry(this.form);
+        } else {
+          return false;
+        }
+      });
     }
   }
 }

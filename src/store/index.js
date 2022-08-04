@@ -21,6 +21,7 @@ const store = new Vuex.Store({
   state: {
     username: '',
     access_token: '',
+    foodEntries: [],
   },
   mutations: {
     setUsername(state, username) {
@@ -36,6 +37,19 @@ const store = new Vuex.Store({
       sessionStorage.setItem('access_token', data);
       commit('setUsername', username);
       commit('setAccessToken', data);
+    },
+    async addFoodEntry(context, {
+      name,
+      date,
+      calories,
+      price,
+    }) {
+      await axios.post('/food-enrties', {
+        name,
+        date,
+        calories,
+        price,
+      });
     }
   },
 });
