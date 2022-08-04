@@ -9,10 +9,22 @@ const Schema = mongoose.Schema;
  * price: US collar cent based. e.g. $56.25 -> 5625
  * */
 const foodEntrySchema = new Schema({
-  name: String,
-  date: Date,
-  calories: Number,
-  price: Number,
+  name: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  calories: {
+    type: Number,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
