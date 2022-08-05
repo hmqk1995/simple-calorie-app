@@ -1,35 +1,27 @@
 <template>
   <div id="app">
-    <LoginPanel />
-    <el-row :gutter="20">
-      <el-col :span="10">
-        <AddFoodEntry />
-        <CalorieCalendar />
-      </el-col>
-      <el-col :span="14">
-        <FoodEntryList />
-      </el-col>
-    </el-row>
+    <DashboardView v-if="username" />
+    <LoginPanel v-else />
   </div>
 </template>
 
 <script>
 import LoginPanel from './components/LoginPanel.vue';
-import AddFoodEntry from './components/AddFoodEntry.vue';
-import FoodEntryList from './components/FoodEntryList.vue';
-import CalorieCalendar from './components/CalorieCalendar.vue';
+import DashboardView from './views/DashboardView.vue';
+import { mapState } from 'vuex';
 
 export default {
   name: 'App',
   components: {
     LoginPanel,
-    AddFoodEntry,
-    FoodEntryList,
-    CalorieCalendar,
+    DashboardView,
   },
   created() {
     sessionStorage.clear();
   },
+  computed: {
+    ...mapState(['username']),
+  }
 }
 </script>
 

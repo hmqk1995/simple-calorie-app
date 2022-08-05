@@ -1,6 +1,7 @@
 <template>
   <div class="login">
-    <el-input placeholder="Please input" v-model="username"></el-input>
+    <el-input placeholder="Please input username" v-model="username"></el-input>
+     <el-input placeholder="Please input access secret key" v-model="key"></el-input>
     <el-button @click="handleLoginButtonClick" type="primary">Login</el-button>
   </div>
 </template>
@@ -11,6 +12,7 @@ export default {
   data() {
     return {
       username: '',
+      key: '',
     }
   },
   methods: {
