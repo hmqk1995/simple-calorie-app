@@ -2,25 +2,25 @@
   <el-container style="height: 100vh;">
     <el-aside width="auto">
       <el-menu
-        :default-active="MenuItem.FoodEntries"
+        :default-active="currTab"
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b"
-        @select="handleSelect"
+        @select="handleTabMenuSelect"
       >
         <h3 class="header-title">
           <i class="el-icon-milk-tea"></i>
           Simple Calorie App
         </h3>
-        <el-menu-item :index="MenuItem.FoodEntries">
+        <el-menu-item :index="TabMenuItem.FoodEntries">
           <i class="el-icon-burger"></i>
           <span slot="title">Food Entries</span>
         </el-menu-item>
-        <el-menu-item :index="MenuItem.Calendar">
+        <el-menu-item :index="TabMenuItem.Calendar">
           <i class="el-icon-date"></i>
           <span slot="title">Calendar</span>
         </el-menu-item>
-        <el-menu-item :index="MenuItem.AddFoodEntry">
+        <el-menu-item :index="TabMenuItem.AddFoodEntry">
           <i class="el-icon-edit"></i>
           <span slot="title">Add Entry</span>
         </el-menu-item>
@@ -28,9 +28,12 @@
     </el-aside>
     <el-container>
       <el-main>
-        <FoodEntryList v-if="currMenu === MenuItem.FoodEntries" />
-        <CalorieCalendar v-if="currMenu === MenuItem.Calendar" />
-        <AddFoodEntry v-if="currMenu === MenuItem.AddFoodEntry" />
+        <FoodEntryList v-if="currTab === TabMenuItem.FoodEntries"/>
+        <CalorieCalendar v-if="currTab === TabMenuItem.Calendar" />
+        <AddFoodEntry
+          v-if="currTab === TabMenuItem.AddFoodEntry"
+          @submit="handleFoodEntrySubmit"
+        />
       </el-main>
     </el-container>
   </el-container>
@@ -40,12 +43,8 @@
 import AddFoodEntry from '../components/AddFoodEntry.vue';
 import FoodEntryList from '../components/FoodEntryList.vue';
 import CalorieCalendar from '../components/CalorieCalendar.vue';
-
-const MenuItem = {
-  FoodEntries: '1',
-  Calendar: '2',
-  AddFoodEntry: '3',
-}
+import { TabMenuItem } from '@/const/index';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -55,13 +54,27 @@ export default {
   },
   data() {
     return {
-      MenuItem,
-      currMenu: MenuItem.FoodEntries,
+      TabMenuItem,
     }
   },
+  computed: {
+    ...mapState(['currTab']),
+  },
   methods: {
-    handleSelect(index) {
-      this.currMenu = index.toString();
+    ...mapMutations(['setCurrTab']),
+    ...mapActions(['addFoodEntry', 'getFoodEntries']),
+    handleTabMenuSelect(index) {
+      this.setCurrTab(index);
+    },
+    async handleFoodEntrySubmit(form) {
+      await this.addFoodEntry(form);
+      await this.getFoodEntries();
+      this.setCurrTab(TabMenuItem.FoodEntries);
+      this.$notify({
+        title: 'Success',
+        message: 'Food entry has been added!',
+        type: 'success'
+      });
     }
   },
 }

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import { TabMenuItem } from '@/const/index';
 
 Vue.use(Vuex);
 
@@ -24,6 +25,7 @@ const store = new Vuex.Store({
     foodEntries: [],
     dailyThreshold: 2100,
     daysAndCaloriesMeetGoal: [],
+    currTab: TabMenuItem.FoodEntries,
   },
   mutations: {
     setUsername(state, username) {
@@ -37,6 +39,9 @@ const store = new Vuex.Store({
     },
     setDaysAndCaloriesMeetGoal(state, daysAndCalories) {
       state.daysAndCaloriesMeetGoal = daysAndCalories;
+    },
+    setCurrTab(state, tab) {
+      state.currTab = tab;
     }
   },
   actions: {

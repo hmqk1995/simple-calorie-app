@@ -8,7 +8,9 @@
         <el-date-picker
           v-model="form.date"
           type="datetime"
-          placeholder="Pick a day">
+          placeholder="Pick a day"
+          :picker-options="pickerOptions"
+        >
         </el-date-picker>
       </el-form-item>
       <el-form-item label="Calories" prop="calories">
@@ -33,7 +35,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -64,16 +65,17 @@ export default {
             required: true,
           }
         ],
+      },
+      pickerOptions: {
+        disabledDate: date => date > Date.now(),
       }
     }
   },
   methods: {
-    ...mapActions(['addFoodEntry', 'getFoodEntries']),
     onSubmit() {
-      this.$refs['form'].validate(async (valid) => {
+      this.$refs['form'].validate((valid) => {
         if (valid) {
-          await this.addFoodEntry(this.form);
-          await this.getFoodEntries();
+          this.$emit('submit', this.form);
         } else {
           return false;
         }
