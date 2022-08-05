@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { generateAccessToken, createUser } = require('../services/users');
+const {
+  generateAccessToken,
+  authenticateToken,
+  createUser,
+  getUserInfoFromUsername,
+} = require('../services/users');
 
 // get all users
 router.get('/users', (req, res) => {
@@ -8,7 +13,15 @@ router.get('/users', (req, res) => {
 });
 
 // Get single user
-router.get('/users/:username', (req, res) => {
+router.get('/users/:username', authenticateToken, async (req, res) => {
+  const { role, username } = req.user;
+  // if admin, can see all users
+  if (
+    role === 'admin' ||
+    (role === 'guest' && req.params.username === username)
+  ) {
+    return res.json(await getUserInfoFromUsername(req.params.username));
+  }
   return res.send('Get a single user');
 });
 
@@ -28,8 +41,13 @@ router.post('/users/create', async (req, res) => {
 });
 
 // send authtoken to the user
-router.post('/users/:username/auth', (req, res) => {
-  const token = generateAccessToken({ username: req.params.username });
+router.post('/users/:username/auth', async (req, res) => {
+  const token = await generateAccessToken({
+    username: req.params.username,
+  });
+  if (token === false) {
+    return res.sendStatus(403);
+  }
   return res.json(token);
 });
 

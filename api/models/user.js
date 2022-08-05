@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 /**
- * name: Food/product name (i.e. Milk, banana, hamburger)
- * date: Date/time when the food was taken 
- * calories: Calorie value (numeric value)
- * price: US collar cent based. e.g. $56.25 -> 5625
+ * username: user identification
+ * role: admin/guest
+ * calorieThreshold: Calorie threshold value for the user (numeric value)
  * */
+ const CalorieThresholdDefault = 2100;
+
  const userSchema = new Schema({
   username: {
     type: String,
@@ -18,6 +19,10 @@ const Schema = mongoose.Schema;
     enum: ['admin', 'guest'],
     required: true,
   },
+  calorieThreshold: {
+    type: Number,
+    default: CalorieThresholdDefault,
+  }
 });
   
 const User = mongoose.model('User', userSchema);

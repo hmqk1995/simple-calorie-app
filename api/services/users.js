@@ -24,8 +24,15 @@ async function createUser({
   await User.findOneAndUpdate(query, update, options);
 }
 
-function generateAccessToken(username) {
-  return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '3600s' });
+async function generateAccessToken({username}) {
+  const data = await getUserInfoFromUsername(username);
+  if (data === null)
+    return false;
+  else
+    return jwt.sign({
+      username: data?.username,
+      role: data?.role,
+    }, process.env.TOKEN_SECRET, { expiresIn: '3600s' });
 }
 
 function authenticateToken(req, res, next) {
@@ -46,8 +53,15 @@ function authenticateToken(req, res, next) {
   })
 }
 
+async function getUserInfoFromUsername(username) {
+  return await User.findOne({
+    username,
+  }).exec();
+}
+
 module.exports = {
   generateAccessToken,
   authenticateToken,
   createUser,
+  getUserInfoFromUsername,
 }
