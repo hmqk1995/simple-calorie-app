@@ -20,6 +20,12 @@
     <el-table-column
       prop="price"
       label="Price">
+      <template slot="header">
+        <i class="el-icon-money"></i> Price
+      </template>
+      <template slot-scope="scope">
+        ${{scope.row.price}}
+      </template>
     </el-table-column>
   </el-table>
 </template>
