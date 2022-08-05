@@ -40,6 +40,9 @@ const store = new Vuex.Store({
     setDaysAndCaloriesMeetGoal(state, daysAndCalories) {
       state.daysAndCaloriesMeetGoal = daysAndCalories;
     },
+    setDailyThreshold(state, calorieThreshold) {
+      state.dailyThreshold = calorieThreshold;
+    },
     setCurrTab(state, tab) {
       state.currTab = tab;
     }
@@ -48,8 +51,10 @@ const store = new Vuex.Store({
     async login({ commit, dispatch }, username) {
       const { data } = await axios.post(`/users/${username}/auth`);
       sessionStorage.setItem('access_token', data);
+      const { calorieThreshold } = (await axios.get(`/users/${username}`)).data;
       commit('setUsername', username);
       commit('setAccessToken', data);
+      commit('setDailyThreshold', calorieThreshold);
       dispatch('getFoodEntries');
     },
     async addFoodEntry(context, {
