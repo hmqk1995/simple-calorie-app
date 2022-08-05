@@ -22,6 +22,8 @@ const store = new Vuex.Store({
     username: '',
     access_token: '',
     foodEntries: [],
+    dailyThreshold: 2100,
+    daysAndCaloriesMeetGoal: [],
   },
   mutations: {
     setUsername(state, username) {
@@ -32,6 +34,9 @@ const store = new Vuex.Store({
     },
     setFoodEntries(state, entries) {
       state.foodEntries = entries;
+    },
+    setDaysAndCaloriesMeetGoal(state, daysAndCalories) {
+      state.daysAndCaloriesMeetGoal = daysAndCalories;
     }
   },
   actions: {
@@ -55,11 +60,15 @@ const store = new Vuex.Store({
         price,
       });
     },
-    async getFoodEntries({commit}) {
+    async getFoodEntries({ commit }) {
       const { data } = await axios.get('/food-enrties');
       const entries = data.map(entry => ({...entry, date: new Date(entry.date).toLocaleString()}))
       commit('setFoodEntries', entries);
     },
+    async getDatesMeetThreshold({ state, commit }) {
+      const { data } = await axios.get(`/report/thresholds/${state.dailyThreshold}`);
+      commit('setDaysAndCaloriesMeetGoal', data);
+    }
   },
 });
 

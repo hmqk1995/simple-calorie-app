@@ -1,8 +1,15 @@
 <template>
   <div id="app">
     <LoginPanel />
-    <AddFoodEntry />
-    <FoodEntryList />
+    <el-row :gutter="20">
+      <el-col :span="10">
+        <AddFoodEntry />
+        <CalorieCalendar />
+      </el-col>
+      <el-col :span="14">
+        <FoodEntryList />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -10,6 +17,7 @@
 import LoginPanel from './components/LoginPanel.vue';
 import AddFoodEntry from './components/AddFoodEntry.vue';
 import FoodEntryList from './components/FoodEntryList.vue';
+import CalorieCalendar from './components/CalorieCalendar.vue';
 
 export default {
   name: 'App',
@@ -17,6 +25,7 @@ export default {
     LoginPanel,
     AddFoodEntry,
     FoodEntryList,
+    CalorieCalendar,
   },
   created() {
     sessionStorage.clear();

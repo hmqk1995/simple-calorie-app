@@ -41,9 +41,4 @@ router.get('/food-enrties', authenticateToken, async (req, res) => {
   );
 })
 
-// GET: get single food entry
-router.get('/food-enrties/:foodId', authenticateToken, (req, res) => {
-  return res.send('Get a single food entry');
-})
-
 module.exports = router;
