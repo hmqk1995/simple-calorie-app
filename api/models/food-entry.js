@@ -21,7 +21,7 @@ const foodEntrySchema = new Schema({
     type: Number,
     required: true,
   },
-  price: {
+  priceCents: {
     type: Number,
     required: true,
   },
@@ -29,7 +29,23 @@ const foodEntrySchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
+}, {
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true },
 });
+
+foodEntrySchema
+  .virtual('price')
+  .get(
+    function() {return (this.priceCents / 100).toFixed(2)}
+  )
+  .set(
+    function(price) {
+      this.set({
+        'priceCents': Math.ceil(Number(price) * 100),
+      })
+    }
+  );
 
 const FoodEntry = mongoose.model('FoodEntry', foodEntrySchema);
 

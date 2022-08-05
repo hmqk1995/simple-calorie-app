@@ -67,7 +67,10 @@ const store = new Vuex.Store({
     },
     async getFoodEntries({ commit }) {
       const { data } = await axios.get('/food-enrties');
-      const entries = data.map(entry => ({...entry, date: new Date(entry.date).toLocaleString()}))
+      const entries = data.map(entry => ({
+        ...entry,
+        date: new Date(entry.date).toLocaleString(),
+      }));
       commit('setFoodEntries', entries);
     },
     async getDatesMeetThreshold({ state, commit }) {
