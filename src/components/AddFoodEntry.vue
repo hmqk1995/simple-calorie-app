@@ -68,11 +68,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addFoodEntry']),
+    ...mapActions(['addFoodEntry', 'getFoodEntries']),
     onSubmit() {
-      this.$refs['form'].validate((valid) => {
+      this.$refs['form'].validate(async (valid) => {
         if (valid) {
-          this.addFoodEntry(this.form);
+          await this.addFoodEntry(this.form);
+          await this.getFoodEntries();
         } else {
           return false;
         }
