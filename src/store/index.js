@@ -81,7 +81,6 @@ const store = new Vuex.Store({
       username,
       access_token,
     }) {
-      // sessionStorage.clear();
       if (!username || !access_token) {
         return false;
       }
@@ -122,7 +121,12 @@ const store = new Vuex.Store({
     async getDatesMeetThreshold({ state, commit }) {
       const { data } = await axios.get(`/report/thresholds/${state.dailyThreshold}`);
       commit('setDaysAndCaloriesMeetGoal', data);
-    }
+    },
+    async updateFoodEntry(context, { _id, form }) {
+      await axios.post(`/food-enrties/${_id}`, {
+        form,
+      });
+    },
   },
 });
 

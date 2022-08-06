@@ -35,8 +35,18 @@ async function getFoodEntriesForAll() {
   }).populate('user').exec();
 }
 
+// update a single food entry
+async function updateFoodEntry(_id, form) {
+  const entry = await FoodEntry.findById(_id);
+  for (let key in form) {
+    entry[key] = form[key];
+  }
+  await entry.save();
+}
+
 module.exports = {
   createFoodEntry,
   getFoodEntries,
   getFoodEntriesForAll,
+  updateFoodEntry,
 }

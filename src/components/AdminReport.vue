@@ -54,7 +54,7 @@
       </el-button>
     </div>
     <el-dialog
-      title="Add food entry"
+      :title="`${entryModifyMode ? 'Modify' : 'Create' } food entry`"
       :visible.sync="dialogVisible"
       width="40%"
       :before-close="handleClose">
@@ -63,6 +63,7 @@
         :fullAccess="true"
         :modifyMode="entryModifyMode"
         :entryId="currentRow?._id || ''"
+        @submit="handleFoodEntryFormSubmit"
       />
     </el-dialog>
   </div>
@@ -84,16 +85,18 @@ export default {
     }
   },
   computed: {
-    ...mapState(['adminFoodEntries']),
+    ...mapState([
+      'adminFoodEntries',
+    ]),
     currForm() {
       if (this.currentRow === null) return null;
-      const {name, date, calories, price, user} = this.currentRow
+      const {name, date, calories, price, user} = this.currentRow;
       return {
         name,
         date,
         calories,
         price,
-        user: user.username,
+        username: user.username,
       }
     },
   },
@@ -101,7 +104,10 @@ export default {
     await this.getFoodEntriesForAll();
   },
   methods: {
-    ...mapActions(['getFoodEntriesForAll']),
+    ...mapActions([
+      'getFoodEntriesForAll',
+      'updateFoodEntry',
+    ]),
     handleCurrentChange(val) {
       this.currentRow = val;
     },
@@ -123,6 +129,27 @@ export default {
       this.clearSelection();
       this.entryModifyMode = false;
       this.dialogVisible = true;
+    },
+    async handleFoodEntryFormSubmit(form) {
+      const { name, date, calories, price } = form;
+      await this.updateFoodEntry(
+        {
+          _id: this.currentRow._id,
+          form: {
+            name,
+            date,
+            calories,
+            price,
+          },
+        }
+      );
+      this.dialogVisible = false;
+      await this.getFoodEntriesForAll();
+      this.$notify({
+        title: 'Success',
+        message: 'Food entry has been modified!',
+        type: 'success'
+      });
     },
   }
 }

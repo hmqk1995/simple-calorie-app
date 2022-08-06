@@ -27,9 +27,10 @@
          <template slot="prepend">$</template>
         </el-input>
       </el-form-item>
-      <el-form-item v-if="fullAccess" label="User" prop="user">
+      <el-form-item v-if="fullAccess" label="Username" prop="username">
         <el-input
-          v-model="formData.user"
+          :disabled="true"
+          v-model="formData.username"
         ></el-input>
       </el-form-item>
       <el-form-item>
@@ -105,7 +106,7 @@ export default {
         date: '',
         calories: '',
         price: '',
-        user: '',
+        username: '',
       }
     },
     applyDefaultFormData() {

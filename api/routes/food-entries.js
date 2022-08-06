@@ -6,6 +6,7 @@ const {
   createFoodEntry,
   getFoodEntries,
   getFoodEntriesForAll,
+  updateFoodEntry,
 } = require('../services/food-entries');
 
 // POST: add a new food entry
@@ -25,6 +26,12 @@ router.post('/food-enrties', authenticateToken, async (req, res) => {
     username,
   });
   return res.json(response);
+})
+
+// POSt: modify an existing food entry
+router.post('/food-enrties/:id', authenticateToken, async (req, res) => {
+  await updateFoodEntry(req.params.id, req.body.form);
+  return res.send('modified food entry successfully');
 })
 
 // GET: get all food entries for the user
