@@ -43,7 +43,7 @@
       </el-table-column>
     </el-table>
     <div style="margin-top: 20px">
-      <el-button circle @click="handleModifyClick" :disabled="currentRow === null">
+      <el-button class="modify-button" circle @click="handleModifyClick" :disabled="currentRow === null">
         <i class="el-icon-edit"></i>
       </el-button>
       <el-button circle type="danger" @click="handleDeleteClick">
@@ -107,6 +107,7 @@ export default {
     ...mapActions([
       'getFoodEntriesForAll',
       'updateFoodEntry',
+      'deleteFoodEntry',
     ]),
     handleCurrentChange(val) {
       this.currentRow = val;
@@ -123,7 +124,19 @@ export default {
       this.dialogVisible = true;
     },
     handleDeleteClick() {
-
+      this.$confirm('Are you sure to delete this entry?')
+      .then(async () => {
+        await this.deleteFoodEntry({
+          _id: this.currentRow._id,
+        });
+        await this.getFoodEntriesForAll();
+        this.$notify({
+          title: 'Success',
+          message: 'Food entry has been deleted!',
+          type: 'success'
+        });
+      })
+      .catch(() => {});
     },
     handleAddClick() {
       this.clearSelection();
@@ -163,6 +176,15 @@ export default {
   .el-table__body tr.current-row>td.el-table__cell {
     background-color: #a3a3a3;
     color: white;
+  }
+  .modify-button:not(.is-disabled) {
+    background-color: #555c64;
+    color: white;
+
+    &:hover {
+      background-color: #85919f;
+      color: white;
+    }
   }
 }
 </style>

@@ -7,6 +7,7 @@ const {
   getFoodEntries,
   getFoodEntriesForAll,
   updateFoodEntry,
+  deleteFoodEntry,
 } = require('../services/food-entries');
 
 // POST: add a new food entry
@@ -28,10 +29,21 @@ router.post('/food-enrties', authenticateToken, async (req, res) => {
   return res.json(response);
 })
 
-// POSt: modify an existing food entry
+// POST: modify an existing food entry
 router.post('/food-enrties/:id', authenticateToken, async (req, res) => {
   await updateFoodEntry(req.params.id, req.body.form);
   return res.send('modified food entry successfully');
+})
+
+// DELETE: delete an existing food entry
+router.delete('/food-enrties/:id', authenticateToken, async (req, res) => {
+  const { role } = req.user;
+  if (role === 'admin') {
+    await deleteFoodEntry(req.params.id);
+    return res.send('deleted food entry successfully');
+  } else {
+    return res.sendStatus(403);
+  }
 })
 
 // GET: get all food entries for the user

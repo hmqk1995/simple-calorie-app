@@ -127,6 +127,9 @@ const store = new Vuex.Store({
         form,
       });
     },
+    async deleteFoodEntry(context, {_id}) {
+      await axios.delete(`/food-enrties/${_id}`);
+    },
   },
 });
 

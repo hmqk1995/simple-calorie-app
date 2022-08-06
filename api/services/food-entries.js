@@ -44,9 +44,14 @@ async function updateFoodEntry(_id, form) {
   await entry.save();
 }
 
+async function deleteFoodEntry(_id) {
+  await FoodEntry.deleteOne({_id});
+}
+
 module.exports = {
   createFoodEntry,
   getFoodEntries,
   getFoodEntriesForAll,
   updateFoodEntry,
+  deleteFoodEntry,
 }
