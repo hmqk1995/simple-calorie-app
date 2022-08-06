@@ -24,33 +24,39 @@
           <i class="el-icon-edit"></i>
           <span slot="title">Add Entry</span>
         </el-menu-item>
+        <el-menu-item v-if="isAdmin" :index="TabMenuItem.AdminReport">
+          <i class="el-icon-s-order"></i>
+          <span slot="title">Admin Report</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>
       <el-main>
         <FoodEntryList v-if="currTab === TabMenuItem.FoodEntries"/>
         <CalorieCalendar v-if="currTab === TabMenuItem.Calendar" />
-        <AddFoodEntry
+        <AddFoodEntryView
           v-if="currTab === TabMenuItem.AddFoodEntry"
-          @submit="handleFoodEntrySubmit"
         />
+        <AdminReport v-if="isAdmin && currTab === TabMenuItem.AdminReport" />
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import AddFoodEntry from '../components/AddFoodEntry.vue';
+import AddFoodEntryView from './AddFoodEntryView.vue';
 import FoodEntryList from '../components/FoodEntryList.vue';
 import CalorieCalendar from '../components/CalorieCalendar.vue';
+import AdminReport from '@/components/AdminReport.vue';
 import { TabMenuItem } from '@/const/index';
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   components: {
-    AddFoodEntry,
+    AddFoodEntryView,
     FoodEntryList,
     CalorieCalendar,
+    AdminReport,
   },
   data() {
     return {
@@ -58,24 +64,16 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currTab']),
+    ...mapState(['currTab', 'role']),
+    isAdmin() {
+      return this.role === 'admin';
+    },
   },
   methods: {
     ...mapMutations(['setCurrTab']),
-    ...mapActions(['addFoodEntry', 'getFoodEntries']),
     handleTabMenuSelect(index) {
       this.setCurrTab(index);
     },
-    async handleFoodEntrySubmit(form) {
-      await this.addFoodEntry(form);
-      await this.getFoodEntries();
-      this.setCurrTab(TabMenuItem.FoodEntries);
-      this.$notify({
-        title: 'Success',
-        message: 'Food entry has been added!',
-        type: 'success'
-      });
-    }
   },
 }
 </script>

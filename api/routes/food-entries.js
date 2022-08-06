@@ -5,6 +5,7 @@ const { authenticateToken } = require('../services/users');
 const {
   createFoodEntry,
   getFoodEntries,
+  getFoodEntriesForAll,
 } = require('../services/food-entries');
 
 // POST: add a new food entry
@@ -26,7 +27,7 @@ router.post('/food-enrties', authenticateToken, async (req, res) => {
   return res.json(response);
 })
 
-// GET: get all food entries
+// GET: get all food entries for the user
 router.get('/food-enrties', authenticateToken, async (req, res) => {
   const { username } = req.user;
   const data = await getFoodEntries(username);
@@ -39,6 +40,33 @@ router.get('/food-enrties', authenticateToken, async (req, res) => {
       price,
     }))
   );
+})
+
+// GET: get all food entries for all users for admin roles
+router.get('/food-enrties/all', authenticateToken, async (req, res) => {
+  const { role } = req.user;
+  if (role === 'admin') {
+    const data = await getFoodEntriesForAll();
+    return res.send(
+      data.map(({
+        name,
+        date,
+        calories,
+        price,
+        user,
+        _id,
+      }) => ({
+        name,
+        date,
+        calories,
+        price,
+        user,
+        _id,
+      }))
+    );
+  } else {
+    return res.sendStatus(403);
+  }
 })
 
 module.exports = router;

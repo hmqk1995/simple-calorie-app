@@ -18,6 +18,7 @@ async function createFoodEntry({
   return await foodEntry.save();
 }
 
+// get all food entries for a specfic user
 async function getFoodEntries(username) {
   const user = await User.findOne({username});
   return await FoodEntry.find({
@@ -27,7 +28,15 @@ async function getFoodEntries(username) {
   }).exec();
 }
 
+// get all food entries for all users (admin)
+async function getFoodEntriesForAll() {
+  return await FoodEntry.find({}).sort({
+    date: 'desc'
+  }).populate('user').exec();
+}
+
 module.exports = {
   createFoodEntry,
   getFoodEntries,
+  getFoodEntriesForAll,
 }

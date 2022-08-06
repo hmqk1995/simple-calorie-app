@@ -7,6 +7,9 @@
       prop="date"
       label="Date"
     >
+    <template slot-scope="scope">
+      {{ new Date(scope.row.date).toLocaleString() }}
+    </template>
     </el-table-column>
     <el-table-column
       prop="name"

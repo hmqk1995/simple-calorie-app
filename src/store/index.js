@@ -21,8 +21,10 @@ axios.interceptors.request.use(
 const store = new Vuex.Store({
   state: {
     username: '',
+    role: '',
     access_token: '',
     foodEntries: [],
+    adminFoodEntries: [],
     dailyThreshold: 2100,
     daysAndCaloriesMeetGoal: [],
     currTab: TabMenuItem.FoodEntries,
@@ -31,11 +33,17 @@ const store = new Vuex.Store({
     setUsername(state, username) {
       state.username = username;
     },
+    setRole(state, role) {
+      state.role = role;
+    },
     setAccessToken(state, token) {
       state.access_token = token;
     },
     setFoodEntries(state, entries) {
       state.foodEntries = entries;
+    },
+    setAdminFoodEntries(state, entries) {
+      state.adminFoodEntries = entries;
     },
     setDaysAndCaloriesMeetGoal(state, daysAndCalories) {
       state.daysAndCaloriesMeetGoal = daysAndCalories;
@@ -57,9 +65,11 @@ const store = new Vuex.Store({
       try {
         const {
           username,
+          role,
           calorieThreshold,
         } = (await axios.get(`/users/${_username}`)).data;
         commit('setUsername', username);
+        commit('setRole', role);
         commit('setAccessToken', access_token);
         commit('setDailyThreshold', calorieThreshold);
         return true;
@@ -103,11 +113,11 @@ const store = new Vuex.Store({
     },
     async getFoodEntries({ commit }) {
       const { data } = await axios.get('/food-enrties');
-      const entries = data.map(entry => ({
-        ...entry,
-        date: new Date(entry.date).toLocaleString(),
-      }));
-      commit('setFoodEntries', entries);
+      commit('setFoodEntries', data);
+    },
+    async getFoodEntriesForAll({ commit }) {
+      const { data } = await axios.get('/food-enrties/all');
+      commit('setAdminFoodEntries', data);
     },
     async getDatesMeetThreshold({ state, commit }) {
       const { data } = await axios.get(`/report/thresholds/${state.dailyThreshold}`);
