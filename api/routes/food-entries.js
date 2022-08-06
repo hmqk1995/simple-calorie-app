@@ -12,21 +12,29 @@ const {
 
 // POST: add a new food entry
 router.post('/food-enrties', authenticateToken, async (req, res) => {
-  const { username } = req.user;
+  let { username, role } = req.user;
   const {
     name,
     date,
     calories,
     price
   } = req.body;
-  const response = await createFoodEntry({
-    name,
-    date,
-    calories,
-    price,
-    username,
-  });
-  return res.json(response);
+  // allow admin to add entry to other users
+  if (role === 'admin' && req.body.username) {
+    username = req.body.username;
+  }
+  try {
+    const response = await createFoodEntry({
+      name,
+      date,
+      calories,
+      price,
+      username,
+    });
+    return res.json(response);
+  } catch(error) {
+    return res.sendStatus(406);
+  }
 })
 
 // POST: modify an existing food entry

@@ -106,6 +106,7 @@ export default {
   methods: {
     ...mapActions([
       'getFoodEntriesForAll',
+      'addFoodEntry',
       'updateFoodEntry',
       'deleteFoodEntry',
     ]),
@@ -144,23 +145,47 @@ export default {
       this.dialogVisible = true;
     },
     async handleFoodEntryFormSubmit(form) {
-      const { name, date, calories, price } = form;
-      await this.updateFoodEntry(
-        {
-          _id: this.currentRow._id,
-          form: {
+      const { name, date, calories, price, username } = form;
+      let successMsg = '';
+      if (this.entryModifyMode) {
+        // modify
+        await this.updateFoodEntry(
+          {
+            _id: this.currentRow._id,
+            form: {
+              name,
+              date,
+              calories,
+              price,
+            },
+          }
+        );
+        successMsg = 'Food entry has been modified!';
+      } else {
+        // create
+        try {
+          await this.addFoodEntry({
             name,
             date,
             calories,
             price,
-          },
+            username,
+          });
+        } catch(error) {
+          this.$notify({
+            title: 'Error',
+            message: 'Cannot find the user!',
+            type: 'error'
+          });
+          return;
         }
-      );
+        successMsg = 'Food entry has been added!';
+      }
       this.dialogVisible = false;
       await this.getFoodEntriesForAll();
       this.$notify({
         title: 'Success',
-        message: 'Food entry has been modified!',
+        message: successMsg,
         type: 'success'
       });
     },

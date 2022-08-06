@@ -29,7 +29,7 @@
       </el-form-item>
       <el-form-item v-if="fullAccess" label="Username" prop="username">
         <el-input
-          :disabled="true"
+          :disabled="modifyMode"
           v-model="formData.username"
         ></el-input>
       </el-form-item>

@@ -102,13 +102,16 @@ const store = new Vuex.Store({
       date,
       calories,
       price,
+      username,
     }) {
-      await axios.post('/food-enrties', {
+      const body = {
         name,
         date,
         calories,
         price,
-      });
+      }
+      if (username) body.username = username;
+      await axios.post('/food-enrties', body);
     },
     async getFoodEntries({ commit }) {
       const { data } = await axios.get('/food-enrties');
