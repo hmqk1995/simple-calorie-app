@@ -8,7 +8,7 @@
 <script>
 import LoginPanel from './components/LoginPanel.vue';
 import DashboardView from './views/DashboardView.vue';
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'App',
@@ -16,12 +16,27 @@ export default {
     LoginPanel,
     DashboardView,
   },
-  created() {
-    sessionStorage.clear();
+  async created() {
+    const isValid = await this.validateToken({
+      username: sessionStorage.getItem('username'),
+      access_token: sessionStorage.getItem('access_token'),
+    });
+    if (isValid) {
+      this.getFoodEntries();
+    }
   },
   computed: {
-    ...mapState(['username']),
-  }
+    ...mapState([
+      'username',
+      'access_token',
+    ]),
+  },
+  methods: {
+    ...mapActions([
+      'validateToken',
+      'getFoodEntries',
+    ]),
+  },
 }
 </script>
 

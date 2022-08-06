@@ -48,14 +48,45 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    async login({ commit, dispatch }, username) {
+    async setUserInfo({ commit }, {
+      _username,
+      access_token,
+    }) {
+      sessionStorage.setItem('username', _username);
+      sessionStorage.setItem('access_token', access_token);
+      try {
+        const {
+          username,
+          calorieThreshold,
+        } = (await axios.get(`/users/${_username}`)).data;
+        commit('setUsername', username);
+        commit('setAccessToken', access_token);
+        commit('setDailyThreshold', calorieThreshold);
+        return true;
+      } catch(error) {
+        return false;
+      }
+    },
+    async validateToken({ dispatch }, {
+      username,
+      access_token,
+    }) {
+      // sessionStorage.clear();
+      if (!username || !access_token) {
+        return false;
+      }
+      return await dispatch('setUserInfo', {
+        _username: username,
+        access_token
+      });
+    },
+    async login({ dispatch }, username) {
       const { data } = await axios.post(`/users/${username}/auth`);
-      sessionStorage.setItem('access_token', data);
-      const { calorieThreshold } = (await axios.get(`/users/${username}`)).data;
-      commit('setUsername', username);
-      commit('setAccessToken', data);
-      commit('setDailyThreshold', calorieThreshold);
-      dispatch('getFoodEntries');
+      await dispatch('setUserInfo', {
+        _username: username,
+        access_token: data,
+      });
+      await dispatch('getFoodEntries');
     },
     async addFoodEntry(context, {
       name,
