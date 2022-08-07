@@ -135,6 +135,9 @@ const store = new Vuex.Store({
     },
     async getWeekEntryReport() {
       return await axios.get('/report/entries');
+    },
+    async getUserAvgCaloriesReport() {
+      return await axios.get('/report/users/calories/avg');
     }
   },
 });
