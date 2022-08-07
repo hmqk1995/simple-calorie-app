@@ -12,7 +12,8 @@ const {
 
 // GET: get dates that meet calorie threshold
 router.get('/report/thresholds/:number', authenticateToken, async (req, res) => {
-  const data = await getDatesMeetThreshold(Number(req.params.number));
+  const { username } = req.user;
+  const data = await getDatesMeetThreshold(Number(req.params.number), username);
   return res.json(
     data.map(({date, totalCalories}) => ({
       date,
@@ -23,7 +24,8 @@ router.get('/report/thresholds/:number', authenticateToken, async (req, res) => 
 
 // GET: get months that meet spending limit
 router.get('/report/spending-limit/:number', authenticateToken, async (req, res) => {
-  const data = await getMonthsMeetSpendingLimit(Number(req.params.number));
+  const { username } = req.user;
+  const data = await getMonthsMeetSpendingLimit(Number(req.params.number), username);
   return res.json(
     data.map(({date, totalPrice}) => ({
       date,

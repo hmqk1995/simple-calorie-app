@@ -1,7 +1,14 @@
 const { FoodEntry } = require('../models/index');
+const { getUserInfoFromUsername } = require('./users');
 
-async function getDatesMeetThreshold(threshold = 2100) {
+async function getDatesMeetThreshold(threshold = 2100, username) {
+  const user = await getUserInfoFromUsername(username);
   return await FoodEntry.aggregate([
+    {
+      $match: {
+        user: user._id,
+      }
+    },
     {
       $group: {
         _id: { $dateToString: {
@@ -25,8 +32,14 @@ async function getDatesMeetThreshold(threshold = 2100) {
   ]);
 }
 
-async function getMonthsMeetSpendingLimit(limit = 1000) {
+async function getMonthsMeetSpendingLimit(limit = 1000, username) {
+  const user = await getUserInfoFromUsername(username);
   return await FoodEntry.aggregate([
+    {
+      $match: {
+        user: user._id,
+      }
+    },
     {
       $group: {
         _id: { $dateToString: {
