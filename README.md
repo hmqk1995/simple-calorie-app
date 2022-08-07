@@ -2,6 +2,10 @@
 
 This is a simple calorie tracking app based on Toptal's assignment specs.
 
+![Dashboard](./public/demo1.png)
+
+![Dashboard](./public/demo2.png)
+
 ## Project setup
 
 1. Create an `.env` file under root folder and have the follwing information:
