@@ -3,6 +3,7 @@
     <el-table
       ref="singleTable"
       :data="adminFoodEntries"
+      height="80vh"
       style="width: 100%"
       highlight-current-row
       @current-change="handleCurrentChange"
