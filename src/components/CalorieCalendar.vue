@@ -5,6 +5,7 @@
       <template #dateCell="{ data, date }">
         <div>{{ correctDate(date).getDate() }}</div>
         <div
+          class="met-goal"
           v-if="daysMeetGoal.indexOf(data.day) > -1"
         >
           Met Goal!
@@ -40,5 +41,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.met-goal {
+  color: #ff9800;
+}
 </style>

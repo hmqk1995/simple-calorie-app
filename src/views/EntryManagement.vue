@@ -208,7 +208,7 @@ export default {
     cursor: pointer;
   }
   .el-table__body tr.current-row>td.el-table__cell {
-    background-color: #a3a3a3;
+    background-color: #3e9fff;
     color: white;
   }
   .modify-button:not(.is-disabled) {
