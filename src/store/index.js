@@ -26,7 +26,9 @@ const store = new Vuex.Store({
     foodEntries: [],
     adminFoodEntries: [],
     dailyThreshold: 2100,
+    monthlySpendingLimit: 1000,
     daysAndCaloriesMeetGoal: [],
+    monthsExceedingSpendingLimit: [],
     currTab: TabMenuItem.FoodEntries,
   },
   mutations: {
@@ -47,6 +49,12 @@ const store = new Vuex.Store({
     },
     setDaysAndCaloriesMeetGoal(state, daysAndCalories) {
       state.daysAndCaloriesMeetGoal = daysAndCalories;
+    },
+    setMonthsExceedingSpendingLimit(state, data) {
+      state.monthsExceedingSpendingLimit = data;
+    },
+    setMonthlySpendingLimit(state, limit) {
+      state.monthlySpendingLimit = limit;
     },
     setDailyThreshold(state, calorieThreshold) {
       state.dailyThreshold = calorieThreshold;
@@ -124,6 +132,10 @@ const store = new Vuex.Store({
     async getDatesMeetThreshold({ state, commit }) {
       const { data } = await axios.get(`/report/thresholds/${state.dailyThreshold}`);
       commit('setDaysAndCaloriesMeetGoal', data);
+    },
+    async getMonthsMeetSpendingLimit({ state, commit }) {
+      const { data } = await axios.get(`/report/spending-limit/${state.monthlySpendingLimit}`);
+      commit('setMonthsExceedingSpendingLimit', data);
     },
     async updateFoodEntry(context, { _id, form }) {
       await axios.post(`/food-enrties/${_id}`, {

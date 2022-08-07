@@ -19,44 +19,34 @@ database.once('connected', () => {
 async function init() {
   const oneWeek = 7 * 60 * 60 * 24 * 1000;
   const aWeekAgo = new Date().getTime() - oneWeek;
+  const limit = 1000;
   const result = await FoodEntry.aggregate([
     {
-      $match: {
-        "date": {
-          "$gte": new Date(aWeekAgo),
+      $group: {
+        _id: { $dateToString: {
+          format: '%Y-%m',
+          date: '$date',
+          timezone: 'HST',
+        } },
+        totalPriceCents: {
+          $sum: '$priceCents',
         },
       }
     },
     {
-      $group: {
-        _id: "$user",
-        average_calories: {
-          $avg: "$calories",
-        }
-      },
-    },
-    { $project: { value: 1, average_calories: { $ceil: "$average_calories" } } },
-    {
-      $lookup: {
-        from: 'users',
-        localField: '_id',
-        foreignField: '_id',
-        as: 'user',
+      $project: {
+        date: 1,
+        totalPrice: { $divide: [ "$totalPriceCents", 100 ] }
       }
     },
     {
-      $set: {
-        user: { $arrayElemAt: ["$user", 0] }
-      }
+      $addFields: { date: '$_id' }
     },
     {
-      $set: {
-        username: "$user.username",
+      $match: {
+        totalPrice: {$gte: limit},
       }
-    },
-    {
-      $unset: "user",
-    },
+    }
   ]);
   console.log(JSON.stringify(result))
 }

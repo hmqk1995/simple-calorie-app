@@ -25,6 +25,37 @@ async function getDatesMeetThreshold(threshold = 2100) {
   ]);
 }
 
+async function getMonthsMeetSpendingLimit(limit = 1000) {
+  return await FoodEntry.aggregate([
+    {
+      $group: {
+        _id: { $dateToString: {
+          format: '%Y-%m',
+          date: '$date',
+          timezone: 'HST',
+        } },
+        totalPriceCents: {
+          $sum: '$priceCents',
+        },
+      }
+    },
+    {
+      $project: {
+        date: 1,
+        totalPrice: { $divide: [ "$totalPriceCents", 100 ] }
+      }
+    },
+    {
+      $addFields: { date: '$_id' }
+    },
+    {
+      $match: {
+        totalPrice: {$gte: limit},
+      }
+    }
+  ]);
+}
+
 /**
  * get number of added entries in the last 7 days vs added entries the week before
  * return [
@@ -135,6 +166,7 @@ async function getEntryReport() {
 
 module.exports = {
   getDatesMeetThreshold,
+  getMonthsMeetSpendingLimit,
   getEntryReport,
   getUserAvgCaloriesReport,
 }

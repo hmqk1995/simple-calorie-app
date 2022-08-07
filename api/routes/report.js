@@ -5,6 +5,7 @@ const { authenticateToken } = require('../services/users');
 
 const {
   getDatesMeetThreshold,
+  getMonthsMeetSpendingLimit,
   getEntryReport,
   getUserAvgCaloriesReport,
 } = require('../services/report');
@@ -16,6 +17,17 @@ router.get('/report/thresholds/:number', authenticateToken, async (req, res) => 
     data.map(({date, totalCalories}) => ({
       date,
       totalCalories,
+    }))
+  );
+});
+
+// GET: get months that meet spending limit
+router.get('/report/spending-limit/:number', authenticateToken, async (req, res) => {
+  const data = await getMonthsMeetSpendingLimit(Number(req.params.number));
+  return res.json(
+    data.map(({date, totalPrice}) => ({
+      date,
+      totalPrice,
     }))
   );
 });
