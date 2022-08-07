@@ -99,7 +99,7 @@ export default {
         return;
       }
       const startDate = this.dataRange[0];
-      const endDate = this.dataRange[1];
+      const endDate = new Date(this.dataRange[1].getTime() + 1000 * 60 * 60 * 24);
       this.foodEntriesFiltered = this.foodEntries.slice().reduce((array, entry)=> {
         const isNotInRange =
           (startDate && new Date(entry.date) < new Date(startDate)) ||
