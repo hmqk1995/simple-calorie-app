@@ -98,6 +98,9 @@ export default {
         this.foodEntriesFiltered = this.foodEntries.slice();
         return;
       }
+      if (this.dataRange.length === 0) {
+        return;
+      }
       const startDate = this.dataRange[0];
       const endDate = new Date(this.dataRange[1].getTime() + 1000 * 60 * 60 * 24);
       this.foodEntriesFiltered = this.foodEntries.slice().reduce((array, entry)=> {
