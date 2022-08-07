@@ -12,15 +12,18 @@
     </template>
     </el-table-column>
     <el-table-column
+      sortable
       prop="name"
       label="Name"
       width="180">
     </el-table-column>
     <el-table-column
+      sortable
       prop="calories"
       label="Calories">
     </el-table-column>
     <el-table-column
+      sortable
       prop="price"
       label="Price">
       <template slot="header">
