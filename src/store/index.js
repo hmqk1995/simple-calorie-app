@@ -97,8 +97,13 @@ const store = new Vuex.Store({
         access_token
       });
     },
-    async login({ dispatch }, username) {
-      const { data } = await axios.post(`/users/${username}/auth`);
+    async login({ dispatch }, {
+      username,
+      access_secret,
+    }) {
+      const { data } = await axios.post(`/users/${username}/auth`, {
+        access_secret,
+      });
       await dispatch('setUserInfo', {
         _username: username,
         access_token: data,

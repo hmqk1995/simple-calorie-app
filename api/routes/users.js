@@ -42,6 +42,9 @@ router.post('/users/create', async (req, res) => {
 
 // send authtoken to the user
 router.post('/users/:username/auth', async (req, res) => {
+  if (req.body.access_secret !== 'toptal') {
+    return res.sendStatus(403);
+  }
   const token = await generateAccessToken({
     username: req.params.username,
   });
