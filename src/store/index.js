@@ -133,6 +133,9 @@ const store = new Vuex.Store({
     async deleteFoodEntry(context, {_id}) {
       await axios.delete(`/food-enrties/${_id}`);
     },
+    async getWeekEntryReport() {
+      return await axios.get('/report/entries');
+    }
   },
 });
 

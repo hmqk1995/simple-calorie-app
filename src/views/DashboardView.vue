@@ -24,20 +24,31 @@
           <i class="el-icon-edit"></i>
           <span slot="title">Add Entry</span>
         </el-menu-item>
-        <el-menu-item v-if="isAdmin" :index="TabMenuItem.AdminReport">
-          <i class="el-icon-s-order"></i>
-          <span slot="title">Admin Report</span>
-        </el-menu-item>
+        <el-submenu v-if="isAdmin" :index="TabMenuItem.AdminPanel">
+          <template slot="title">
+            <i class="el-icon-s-tools"></i>
+            <span slot="title">Admin</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item :index="TabMenuItem.EntryManagement">
+              <i class="el-icon-s-order"></i>
+              <span slot="title">Managing Entries</span>
+            </el-menu-item>
+            <el-menu-item :index="TabMenuItem.EntryReport">
+              <i class="el-icon-pie-chart"></i>
+              <span slot="title">Report</span>
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
       </el-menu>
     </el-aside>
     <el-container>
       <el-main>
         <FoodEntryList v-if="currTab === TabMenuItem.FoodEntries"/>
         <CalorieCalendar v-if="currTab === TabMenuItem.Calendar" />
-        <AddFoodEntryView
-          v-if="currTab === TabMenuItem.AddFoodEntry"
-        />
-        <AdminReport v-if="isAdmin && currTab === TabMenuItem.AdminReport" />
+        <AddFoodEntryView v-if="currTab === TabMenuItem.AddFoodEntry" />
+        <EntryManagement v-if="isAdmin && currTab === TabMenuItem.EntryManagement" />
+        <EntryReport v-if="currTab === TabMenuItem.EntryReport" />
       </el-main>
     </el-container>
   </el-container>
@@ -47,7 +58,8 @@
 import AddFoodEntryView from './AddFoodEntryView.vue';
 import FoodEntryList from '../components/FoodEntryList.vue';
 import CalorieCalendar from '../components/CalorieCalendar.vue';
-import AdminReport from '@/components/AdminReport.vue';
+import EntryManagement from '@/views/EntryManagement.vue';
+import EntryReport from '@/views/EntryReport.vue';
 import { TabMenuItem } from '@/const/index';
 import { mapState, mapMutations } from 'vuex';
 
@@ -56,7 +68,8 @@ export default {
     AddFoodEntryView,
     FoodEntryList,
     CalorieCalendar,
-    AdminReport,
+    EntryManagement,
+    EntryReport,
   },
   data() {
     return {
@@ -98,6 +111,9 @@ export default {
   }
   .el-aside {
     background-color: #545c64;
+  }
+  .el-submenu__title i {
+    color:white;
   }
 }
 </style>

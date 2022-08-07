@@ -17,21 +17,45 @@ database.once('connected', () => {
 })
 
 async function init() {
-  console.log(await FoodEntry.aggregate([
+  const oneWeek = 7 * 60 * 60 * 24 * 1000;
+  const aWeekAgo = new Date().getTime() - oneWeek;
+  const twoWeeksAgo = aWeekAgo - oneWeek;
+  const result1 = await FoodEntry.aggregate([
     {
-      $group: {
-        _id: { $dateToString: { format: '%Y-%m-%d', date: '$date'} },
-        totalCalories: {
-          $sum: '$calories',
-        }
+      $match: {
+        "date": {
+          "$gte": new Date(aWeekAgo),
+        },
       }
     },
     {
+      $group: {
+        _id: 'sum',
+        count: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+  const result2 = await FoodEntry.aggregate([
+    {
       $match: {
-        totalCalories: {$gte: 300},
+        "date": {
+          "$gte": new Date(twoWeeksAgo),
+          "$lte": new Date(aWeekAgo),
+        },
       }
-    }
-  ]));
+    },
+    {
+      $group: {
+        _id: 'sum',
+        count: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+  return [result1[0].count, result2[0].count];
 }
 
 init();

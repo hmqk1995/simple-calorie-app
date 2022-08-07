@@ -71,7 +71,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import FoodEntryForm from './FoodEntryForm.vue';
+import FoodEntryForm from '@/components/FoodEntryForm.vue';
 
 export default {
   components: {
