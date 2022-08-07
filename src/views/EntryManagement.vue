@@ -8,6 +8,7 @@
       @current-change="handleCurrentChange"
     >
       <el-table-column
+        sortable
         prop="date"
         label="Date"
       >
@@ -16,15 +17,18 @@
         </template>
       </el-table-column>
       <el-table-column
+        sortable
         prop="name"
         label="Name"
         width="180">
       </el-table-column>
       <el-table-column
+        sortable
         prop="calories"
         label="Calories">
       </el-table-column>
       <el-table-column
+        sortable
         prop="price"
         label="Price">
         <template slot="header">
@@ -35,6 +39,8 @@
         </template>
       </el-table-column>
       <el-table-column
+        sortable
+        :sort-method="handleUserSort"
         prop="user"
         label="User">
         <template slot-scope="scope">
@@ -188,6 +194,9 @@ export default {
         message: successMsg,
         type: 'success'
       });
+    },
+    handleUserSort(a, b) {
+      return a?.user?.username.localeCompare(b?.user?.username);
     },
   }
 }
