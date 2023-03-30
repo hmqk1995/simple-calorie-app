@@ -39,8 +39,14 @@ router.post('/food-enrties', authenticateToken, async (req, res) => {
 
 // POST: modify an existing food entry
 router.post('/food-enrties/:id', authenticateToken, async (req, res) => {
-  await updateFoodEntry(req.params.id, req.body.form);
-  return res.send('modified food entry successfully');
+  try {
+    await updateFoodEntry(req.params.id, req.body.form);
+    return res.send('modified food entry successfully');
+  } catch(error) {
+    return res.sendStatus(403);
+  }
+  
+  
 })
 
 // DELETE: delete an existing food entry

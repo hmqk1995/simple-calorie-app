@@ -9,7 +9,7 @@
           class="met-goal"
           v-if="daysMeetGoal.indexOf(data.day) > -1"
         >
-          Met Goal!
+          Exceed calorie limit!
         </div>
     </template>
     </el-calendar>
